@@ -33,10 +33,11 @@ jobs:
                 run: |
                     ./gradlew shadowJar
 
-            # Github Action 실행 서버 IP 추출
-            -   name: Get Github Actions IP
-                id: ip
-                uses: candidob/get-runner-ip@v1.0.0
+            -   name: Install AWS CLI
+                run: |
+                    curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+                    unzip awscliv2.zip
+                    sudo ./aws/install
 
             # AWS Credentials
             -   name: Configure AWS Credentials
@@ -48,9 +49,10 @@ jobs:
 
             -   name: Deploy to AWS Lambda
                 run: |
+                    export AWS_PAGER=""
                     aws lambda update-function-code \
                       --function-name sendSentryAlertsToDiscord \
-                      --zip-file fileb://build/libs/yappu-world-server-lambda-shadow.jar    
+                      --zip-file fileb://build/libs/yappu-world-server-lambda-shadow.jar
 
             # Discord Notification
             -   name: CD Success Notification
