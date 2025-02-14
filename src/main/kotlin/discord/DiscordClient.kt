@@ -12,14 +12,14 @@ class DiscordClient {
     suspend fun send(message: DiscordMessage): DiscordWebhookResponse {
         val dotenv = Dotenv.load()
         val response = HttpClient(CIO).use { client ->
-            client.post(dotenv["DISCORD_WEBHOOK"]) {
+            client.post(dotenv["DISCORD_SERVER_ALERT_WEBHOOK"]) {
                 contentType(ContentType.Application.Json)
                 setBody(jacksonObjectMapper().writeValueAsString(message))
             }
         }
 
         return DiscordWebhookResponse(
-            response.status,
+            response.status.value,
             response.body<String>()
         )
     }

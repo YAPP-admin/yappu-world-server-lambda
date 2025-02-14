@@ -10,7 +10,9 @@ import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import kotlinx.coroutines.runBlocking
 
-class SentryDiscordWebhookHandler : RequestHandler<Any, APIGatewayProxyResponseEvent> {
+class SentryDiscordWebhookHandler(
+    private val discordClient: DiscordClient = DiscordClient()
+) : RequestHandler<Any, APIGatewayProxyResponseEvent> {
 
     override fun handleRequest(input: Any, context: Context): APIGatewayProxyResponseEvent {
         val event = parseEvent(input)
@@ -31,7 +33,7 @@ class SentryDiscordWebhookHandler : RequestHandler<Any, APIGatewayProxyResponseE
             )
         )
 
-        return runBlocking { DiscordClient().send(message) }
+        return runBlocking { discordClient.send(message) }
             .let {
                 APIGatewayProxyResponseEvent()
                     .withStatusCode(200)
