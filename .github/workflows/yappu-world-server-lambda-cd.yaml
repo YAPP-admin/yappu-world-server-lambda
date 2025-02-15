@@ -27,6 +27,7 @@ jobs:
                 run: |
                     mkdir -p src/main/resources
                     echo "DISCORD_SERVER_ALERT_WEBHOOK=${{ secrets.DISCORD_SERVER_ALERT_WEBHOOK }}" > src/main/resources/.env
+                    echo "DISCORD_SERVER_TEST_WEBHOOK=${{ secrets.DISCORD_SERVER_TEST_WEBHOOK }}" >> src/main/resources/.env
                     cat src/main/resources/.env
 
             -   name: Build ShadowJar
