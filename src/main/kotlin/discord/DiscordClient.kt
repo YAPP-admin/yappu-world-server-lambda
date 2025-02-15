@@ -1,7 +1,6 @@
 package co.discord
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import io.github.cdimascio.dotenv.Dotenv
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.engine.cio.*
@@ -10,9 +9,8 @@ import io.ktor.http.*
 
 class DiscordClient {
     suspend fun sendAlertServer(message: DiscordMessage, serverWebhook: String): DiscordWebhookResponse {
-        val dotenv = Dotenv.load()
         val response = HttpClient(CIO).use { client ->
-            client.post(dotenv["DISCORD_SERVER_ALERT_WEBHOOK"]) {
+            client.post(serverWebhook) {
                 contentType(ContentType.Application.Json)
                 setBody(jacksonObjectMapper().writeValueAsString(message))
             }
