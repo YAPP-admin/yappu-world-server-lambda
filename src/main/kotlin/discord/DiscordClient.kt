@@ -9,7 +9,7 @@ import io.ktor.client.request.*
 import io.ktor.http.*
 
 class DiscordClient {
-    suspend fun send(message: DiscordMessage): DiscordWebhookResponse {
+    suspend fun sendAlertServer(message: DiscordMessage, serverWebhook: String): DiscordWebhookResponse {
         val dotenv = Dotenv.load()
         val response = HttpClient(CIO).use { client ->
             client.post(dotenv["DISCORD_SERVER_ALERT_WEBHOOK"]) {
